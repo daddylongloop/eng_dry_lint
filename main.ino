@@ -23,8 +23,11 @@ const float R_DIV = 47500.0; // Measured resistance of 3.3k resistor
 
 // Upload the code, then try to adjust these values to more
 // accurately calculate bend degree.
-const float STRAIGHT_RESISTANCE = 27257.69; // resistance when straight
-const float BEND_RESISTANCE = 46000.83; // resistance at 90 deg
+const float STRAIGHT_RESISTANCE = 65505.82; // resistance when straight
+const float BEND_RESISTANCE = 103408.38; // resistance at 90 deg
+
+const float yellow_threshold = 12.0;
+const float green_threshold = yellow_threshold * 2.2;
 
 float get_angle() {
   // Read the ADC, and calculate voltage and resistance from it
@@ -53,20 +56,20 @@ void loop()
 {
   float angle = get_angle();
   Serial.println(angle);
-  if (angle < 30.0f) {
+  if (angle < yellow_threshold) { // red light 
     digitalWrite(5, HIGH);
     digitalWrite(4, LOW);
     digitalWrite(3, LOW);
   }
-  else if (angle > 30.0f && angle < 60.0f) {
+  else if (angle >= yellow_threshold && angle <= green_threshold) { // yellow light
     digitalWrite(4, HIGH);
     digitalWrite(5, LOW);
     digitalWrite(3, LOW);
   }
-  else if (angle > 60.0f) {
+  else if (angle >= green_threshold) { // green light
     digitalWrite(3, HIGH);
     digitalWrite(4, LOW);
     digitalWrite(5, LOW);
   }
-  delay(500);
+  //delay(500);
 }
